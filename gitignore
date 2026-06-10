@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Logs (keep folder, ignore generated files)
+logs/*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor configs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Secrets
+.env
+*.key
+credentials.json
+
+# Optional: ignore Bronze parquet files since they regenerate from raw/
+# Uncomment if your repo gets too big
+# data/bronze/*.parquet
