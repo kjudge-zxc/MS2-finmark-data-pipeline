@@ -1,0 +1,6 @@
+file,issue_type,count,handling
+event_logs.csv,Exact duplicate rows,0,Removed before Silver export
+event_logs.csv,Checkout rows with missing amount,142,Kept rows and flagged
+event_logs.csv,Non-checkout rows with amount present,866,Kept rows and flagged
+marketing_summary.csv,Exact duplicate rows,0,Removed before Silver export
+trend_report.csv,Exact duplicate rows,0,Removed before Silver export

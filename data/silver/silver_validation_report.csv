@@ -1,0 +1,14 @@
+file,check,status,details
+event_logs.csv,Dropped undocumented junk columns,PASS,Dropped 45 columns
+event_logs.csv,Allowed event_type values,PASS,0 invalid values
+marketing_summary.csv,Dropped undocumented junk columns,PASS,Dropped 45 columns
+marketing_summary.csv,Required field: date,PASS,0 missing/invalid values
+marketing_summary.csv,Required field: users_active,PASS,0 missing/invalid values
+marketing_summary.csv,Required field: total_sales,PASS,0 missing/invalid values
+marketing_summary.csv,Required field: new_customers,PASS,0 missing/invalid values
+marketing_summary.csv,Required field: report_generated,PASS,0 missing/invalid values
+trend_report.csv,Dropped undocumented junk columns,PASS,Dropped 47 columns
+trend_report.csv,Required field: week,PASS,0 missing/invalid values
+trend_report.csv,Required field: week_start_date,PASS,0 missing/invalid values
+trend_report.csv,Required field: avg_users,PASS,0 missing/invalid values
+trend_report.csv,Required field: sales_growth_rate,PASS,0 missing/invalid values
