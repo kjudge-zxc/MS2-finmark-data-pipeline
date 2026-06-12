@@ -1,0 +1,6 @@
+stage_order,stage_name,event_type,event_count,drop_off_from_previous,conversion_rate_pct
+Stage 1,Product View,page_view,233,0,100.0
+Stage 2,Search,search,251,0,107.7
+Stage 3,Add to Cart,add_to_cart,252,0,108.2
+Stage 4,Wishlist Add,wishlist_add,260,0,111.6
+Stage 5,Checkout,checkout,260,0,111.6

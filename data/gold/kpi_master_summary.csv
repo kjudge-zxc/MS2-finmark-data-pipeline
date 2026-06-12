@@ -1,0 +1,14 @@
+metric,value,unit,source
+Total Revenue (All Days),5767580.45,USD,marketing_summary
+Average Daily Revenue,57675.8,USD/day,marketing_summary
+Peak Daily Revenue,89585.41,USD,marketing_summary
+Lowest Daily Revenue,20780.11,USD,marketing_summary
+Average Daily Active Users,273.3,users,marketing_summary
+Total New Customers,765.0,customers,marketing_summary
+Avg Revenue per Active User,281.11,USD/user,marketing_summary
+Total Events Logged,2000.0,events,event_logs
+Total Checkout Events,260.0,events,event_logs
+Checkout Rate,13.0,%,event_logs
+Missing Amount Rate (Checkouts),54.62,%,event_logs
+Average Weekly Sales Growth Rate,4.66,%,trend_report
+Weeks with Positive Growth,16.0,weeks,trend_report
