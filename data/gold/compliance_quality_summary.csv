@@ -3,8 +3,8 @@ Total Silver event records,2000,INFO
 Duplicate rows removed,0,PASS
 Silver validation checks passed,13,PASS
 Silver validation checks failed,0,INFO
-Missing amount fields (all events),874,WARNING
-Missing amount rate — all events (%),43.7,WARNING
+Missing amount fields (all events),1016,WARNING
+Missing amount rate — all events (%),50.8,WARNING
 Checkout rows with missing amount,142,WARNING
 Missing checkout amount rate (%),54.62,WARNING
 Non-checkout rows with amount (flagged),866,WARNING
