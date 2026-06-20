@@ -1,7 +1,15 @@
+"""
+Silver Layer Cleaning and Validation
+======================================
+Cleans the three raw FinMark CSVs and writes validated, structured outputs
+to data/silver/, along with a validation report and a quality issues log.
+"""
+
 import pandas as pd
 import numpy as np
 from pathlib import Path
 
+# --- Path setup: ---
 BASE_DIR = Path(__file__).resolve().parents[1]
 RAW_DIR = BASE_DIR / "data" / "raw"
 SILVER_DIR = BASE_DIR / "data" / "silver"
@@ -10,14 +18,18 @@ SILVER_DIR.mkdir(parents=True, exist_ok=True)
 validation_rows = []
 issue_rows = []
 
+
 def col_junk(df):
     return [c for c in df.columns if c.startswith("col_")]
+
 
 def add_validation(file, check, status, details):
     validation_rows.append({"file": file, "check": check, "status": status, "details": details})
 
+
 def add_issue(file, issue_type, count, handling):
     issue_rows.append({"file": file, "issue_type": issue_type, "count": int(count), "handling": handling})
+
 
 def clean_event_logs():
     file = "event_logs.csv"
@@ -64,6 +76,7 @@ def clean_event_logs():
     df.to_csv(SILVER_DIR / "event_logs_clean.csv", index=False)
     return df
 
+
 def clean_marketing_summary():
     file = "marketing_summary.csv"
     df = pd.read_csv(RAW_DIR / file)
@@ -91,6 +104,7 @@ def clean_marketing_summary():
     df.to_csv(SILVER_DIR / "marketing_summary_clean.csv", index=False)
     return df
 
+
 def clean_trend_report():
     file = "trend_report.csv"
     df = pd.read_csv(RAW_DIR / file)
@@ -115,10 +129,23 @@ def clean_trend_report():
     df.to_csv(SILVER_DIR / "trend_report_clean.csv", index=False)
     return df
 
-if __name__ == "__main__":
-    clean_event_logs()
-    clean_marketing_summary()
-    clean_trend_report()
+
+def clean_all():
+    """Runs all three Silver cleaning steps and writes validation/issue logs."""
+    # Reset accumulators in case this is called more than once in the same session
+    validation_rows.clear()
+    issue_rows.clear()
+
+    events = clean_event_logs()
+    marketing = clean_marketing_summary()
+    trends = clean_trend_report()
+
     pd.DataFrame(validation_rows).to_csv(SILVER_DIR / "silver_validation_report.csv", index=False)
     pd.DataFrame(issue_rows).to_csv(SILVER_DIR / "silver_quality_issues.csv", index=False)
     print("Silver Layer cleaning completed. Outputs saved to data/silver/.")
+
+    return events, marketing, trends
+
+
+if __name__ == "__main__":
+    clean_all()

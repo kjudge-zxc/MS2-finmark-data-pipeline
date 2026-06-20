@@ -51,11 +51,4 @@ This folder contains the **Silver Layer Cleaning and Validation** output for Mil
 
 ## Why This Supports the Pipeline
 
-The Silver Layer acts as the cleaned and validated version of the Bronze Layer. It prepares the data for Gold Layer transformations such as sales summaries, feature usage counts, top product performance, and dashboard-ready tables. This confirms that the proposed Bronze → Silver → Gold pipeline has started functioning as an actual prototype.
-
-## What We Still Need Refinement
-
-- Confirm with FinMark whether non-checkout events should contain amount values.
-- Confirm whether checkout events with missing amounts should be corrected upstream or excluded from revenue calculations.
-- Add stronger schema validation using Pandera once the team finalizes the official schema.
-- Add session IDs, error logs, or source system identifiers in later milestones if available.
+The Silver Layer acts as the cleaned and validated version of the Bronze Layer. It prepares the data for Gold Layer transformations such as sales summaries, feature usage counts, top product performance, and dashboard-ready tables. This confirms that the proposed Bronze to Silver to Gold pipeline has started functioning as an actual prototype.
