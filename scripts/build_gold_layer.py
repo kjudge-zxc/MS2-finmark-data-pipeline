@@ -22,14 +22,19 @@ def load_silver():
     trends = pd.read_csv(SILVER_DIR / "trend_report_clean.csv")
     quality = pd.read_csv(SILVER_DIR / "silver_quality_issues.csv")
     validation = pd.read_csv(SILVER_DIR / "silver_validation_report.csv")
+    incident_path = SILVER_DIR / "resilience_incident_report.csv"
+    incidents = pd.read_csv(incident_path) if incident_path.exists() else pd.DataFrame(
+        columns=["file", "column", "severity", "issue", "fallback"]
+    )
 
     print("event_logs_clean     :", events.shape)
     print("marketing_summary    :", marketing.shape)
     print("trend_report_clean   :", trends.shape)
     print("silver_quality_issues:", quality.shape)
     print("silver_validation    :", validation.shape)
+    print("resilience_incidents :", incidents.shape)
 
-    return events, marketing, trends, quality, validation
+    return events, marketing, trends, quality, validation, incidents
 
 
 def build_kpi_master_summary(events, marketing, trends):
@@ -142,17 +147,24 @@ def build_ops_checkout_health(events):
     return checkout_daily
 
 
-def build_compliance_quality_summary(events, quality, validation):
+def issue_count(quality, pattern):
+    matches = quality[quality["issue_type"].str.contains(pattern, case=False, na=False)]["count"]
+    return int(matches.sum()) if not matches.empty else 0
+
+
+def build_compliance_quality_summary(events, quality, validation, incidents):
     checkouts = events[events["is_checkout"] == True]
 
     total_events = len(events)
     missing_amounts = events["amount"].isna().sum()
     checkout_count = int(events["is_checkout"].sum())
     missing_checkout = int(checkouts["is_amount_missing"].sum())
-    duplicate_count = int(quality[quality["issue_type"].str.contains("duplicate", case=False)]["count"].values[0])
-    flagged_non_checkout = int(quality[quality["issue_type"].str.contains("Non-checkout", case=False)]["count"].values[0])
+    duplicate_count = issue_count(quality, "duplicate")
+    flagged_non_checkout = issue_count(quality, "Non-checkout")
     validation_passed = int((validation["status"] == "PASS").sum())
     validation_failed = int((validation["status"] == "FAIL").sum())
+    high_incidents = int((incidents["severity"] == "HIGH").sum()) if not incidents.empty else 0
+    medium_incidents = int((incidents["severity"] == "MEDIUM").sum()) if not incidents.empty else 0
 
     compliance = pd.DataFrame([
         {"metric": "Total Silver event records",              "value": total_events,                                    "status": "INFO"},
@@ -164,6 +176,8 @@ def build_compliance_quality_summary(events, quality, validation):
         {"metric": "Checkout rows with missing amount",       "value": missing_checkout,                                "status": "WARNING"},
         {"metric": "Missing checkout amount rate (%)",        "value": round(missing_checkout/checkout_count*100, 2),   "status": "WARNING"},
         {"metric": "Non-checkout rows with amount (flagged)", "value": flagged_non_checkout,                            "status": "WARNING"},
+        {"metric": "High-severity resilience incidents",       "value": high_incidents,                                  "status": "WARNING" if high_incidents else "PASS"},
+        {"metric": "Medium-severity resilience incidents",     "value": medium_incidents,                                "status": "WARNING" if medium_incidents else "PASS"},
         {"metric": "User IDs anonymized",                     "value": "Yes — U-prefixed pseudonymous IDs",             "status": "PASS"},
         {"metric": "PII fields detected in dataset",          "value": "None",                                         "status": "PASS"},
     ])
@@ -175,14 +189,14 @@ def build_compliance_quality_summary(events, quality, validation):
 
 def build_all():
     """Loads Silver data and builds all six Gold tables in order."""
-    events, marketing, trends, quality, validation = load_silver()
+    events, marketing, trends, quality, validation, incidents = load_silver()
 
     kpi = build_kpi_master_summary(events, marketing, trends)
     funnel = build_funnel_conversion(events)
     feature_by_hour = build_product_feature_by_hour(events)
     ops_hourly = build_ops_hourly_load(events)
     checkout_health = build_ops_checkout_health(events)
-    compliance = build_compliance_quality_summary(events, quality, validation)
+    compliance = build_compliance_quality_summary(events, quality, validation, incidents)
 
     print("\nGold Layer build complete. 6 files saved to data/gold/.")
 

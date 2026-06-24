@@ -1,12 +1,25 @@
 file,check,status,details
+event_logs.csv,Required source column: user_id,PASS,Column found
+event_logs.csv,Required source column: event_type,PASS,Column found
+event_logs.csv,Required source column: event_time,PASS,Column found
+event_logs.csv,Required source column: product_id,PASS,Column found
+event_logs.csv,Required source column: amount,PASS,Column found
 event_logs.csv,Dropped undocumented junk columns,PASS,Dropped 45 columns
 event_logs.csv,Allowed event_type values,PASS,0 invalid values
+marketing_summary.csv,Required source column: date,PASS,Column found
+marketing_summary.csv,Required source column: users_active,PASS,Column found
+marketing_summary.csv,Required source column: total_sales,PASS,Column found
+marketing_summary.csv,Required source column: new_customers,PASS,Column found
+marketing_summary.csv,Required source column: report_generated,PASS,Column found
 marketing_summary.csv,Dropped undocumented junk columns,PASS,Dropped 45 columns
 marketing_summary.csv,Required field: date,PASS,0 missing/invalid values
 marketing_summary.csv,Required field: users_active,PASS,0 missing/invalid values
 marketing_summary.csv,Required field: total_sales,PASS,0 missing/invalid values
 marketing_summary.csv,Required field: new_customers,PASS,0 missing/invalid values
 marketing_summary.csv,Required field: report_generated,PASS,0 missing/invalid values
+trend_report.csv,Required source column: week,PASS,Column found
+trend_report.csv,Required source column: avg_users,PASS,Column found
+trend_report.csv,Required source column: sales_growth_rate,PASS,Column found
 trend_report.csv,Dropped undocumented junk columns,PASS,Dropped 47 columns
 trend_report.csv,Required field: week,PASS,0 missing/invalid values
 trend_report.csv,Required field: week_start_date,PASS,0 missing/invalid values

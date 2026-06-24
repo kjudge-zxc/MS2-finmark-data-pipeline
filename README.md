@@ -18,6 +18,18 @@ The scope here covers:
 
 The Silver Layer cleaning, Gold Layer transformations, and dashboard work are handled in separate notebooks.
 
+## Milestone 2 Draft 2 Resilience Update
+
+For the Data Analytics challenge scenario, the pipeline was updated to handle missing or corrupted transaction/revenue columns before processing. The Silver Layer now checks required columns, logs schema incidents, applies controlled fallbacks, and writes `data/silver/resilience_incident_report.csv`. The Gold Layer also includes resilience incident counts in the compliance quality summary.
+
+Run the resilience test with:
+
+```
+python scripts/test_resilience_scenario.py
+```
+
+See `docs/DRAFT2_RESILIENCE_NOTE.md` for the short explanation of the solution.
+
 ## How to Run
 
 1. Install dependencies:
