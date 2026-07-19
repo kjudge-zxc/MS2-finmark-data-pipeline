@@ -1,0 +1,4 @@
+filename,source_path,destination_path
+event_logs.csv,data\raw\event_logs.csv,data\bronze\raw\event_logs.csv
+marketing_summary.csv,data\raw\marketing_summary.csv,data\bronze\raw\marketing_summary.csv
+trend_report.csv,data\raw\trend_report.csv,data\bronze\raw\trend_report.csv

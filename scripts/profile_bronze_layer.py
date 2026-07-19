@@ -5,18 +5,44 @@ Profiles the three raw FinMark CSVs (event_logs, marketing_summary, trend_report
 and writes a consolidated data quality summary to data/bronze/.
 """
 
-import pandas as pd
+import shutil
 from pathlib import Path
+
+import pandas as pd
 
 # --- Path setup: ---
 BASE_DIR = Path(__file__).resolve().parents[1]
 RAW_DIR = BASE_DIR / "data" / "raw"
 BRONZE_DIR = BASE_DIR / "data" / "bronze"
+BRONZE_RAW_DIR = BRONZE_DIR / "raw"
 BRONZE_DIR.mkdir(parents=True, exist_ok=True)
+BRONZE_RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def col_junk(df):
     return [c for c in df.columns if c.startswith("col_")]
+
+
+def ingest_raw_data() -> pd.DataFrame:
+    """Copy each raw CSV into a bronze-side raw folder and record the transfer."""
+    filenames = ["event_logs.csv", "marketing_summary.csv", "trend_report.csv"]
+    manifest_rows = []
+
+    for filename in filenames:
+        source_path = RAW_DIR / filename
+        destination_path = BRONZE_RAW_DIR / filename
+        shutil.copy2(source_path, destination_path)
+        manifest_rows.append({
+            "filename": filename,
+            "source_path": str(source_path.relative_to(BASE_DIR)),
+            "destination_path": str(destination_path.relative_to(BASE_DIR)),
+        })
+
+    manifest = pd.DataFrame(manifest_rows)
+    manifest.to_csv(BRONZE_DIR / "bronze_ingestion_manifest.csv", index=False)
+    print(f"\nCopied raw files into {BRONZE_RAW_DIR.relative_to(BASE_DIR)}")
+    print(manifest.to_string(index=False))
+    return manifest
 
 
 def profile_dataset(filename: str) -> dict:
@@ -94,7 +120,9 @@ def check_trend_report():
 
 
 def profile_all() -> pd.DataFrame:
-    """Profiles all three raw datasets and writes the consolidated summary CSV."""
+    """Ingest raw data into bronze, profile all three datasets, and write the outputs."""
+    ingest_manifest = ingest_raw_data()
+
     profile_events = profile_dataset("event_logs.csv")
     check_event_logs()
 
@@ -108,6 +136,11 @@ def profile_all() -> pd.DataFrame:
     summary["pct_missing_overall"] = (
         summary["missing_values"] / (summary["rows"] * summary["meaningful_cols"]) * 100
     ).round(2)
+    summary["ingested_to_bronze"] = True
+    summary["bronze_copy_path"] = [
+        str((BRONZE_RAW_DIR / row["filename"]).relative_to(BASE_DIR))
+        for _, row in summary[["filename"]].iterrows()
+    ]
 
     summary.to_csv(BRONZE_DIR / "bronze_quality_report.csv", index=False)
     print(f"\n{'='*70}")

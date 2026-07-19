@@ -1,4 +1,4 @@
-filename,rows,cols,meaningful_cols,junk_cols,missing_values,duplicates,pct_missing_overall
-event_logs.csv,2000,50,5,45,1016,0,10.16
-marketing_summary.csv,100,50,5,45,0,0,0.0
-trend_report.csv,20,50,3,47,0,0,0.0
+filename,rows,cols,meaningful_cols,junk_cols,missing_values,duplicates,pct_missing_overall,ingested_to_bronze,bronze_copy_path
+event_logs.csv,2000,50,5,45,1016,0,10.16,True,data\bronze\raw\event_logs.csv
+marketing_summary.csv,100,50,5,45,0,0,0.0,True,data\bronze\raw\marketing_summary.csv
+trend_report.csv,20,50,3,47,0,0,0.0,True,data\bronze\raw\trend_report.csv
